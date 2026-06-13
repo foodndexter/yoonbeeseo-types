@@ -11,7 +11,7 @@ export const StudentEntitySchema = z.object({
   mobile: z.string().length(11).startsWith("010"),
   payment_date: z.number().min(1).max(31),
   enrolled_at: z.date(),
-  discharged_at: z.date(),
+  discharged_at: z.date().nullable(),
   created_at: z.date(),
   updated_at: z.date(),
 });
