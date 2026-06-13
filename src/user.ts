@@ -11,6 +11,8 @@ export const YoonbeeseoUserEntitySchema = z.object({
   mobile: z.string().length(11).startsWith("010"),
   name: z.string(),
   dob: z.string().length(8).nullable(),
+  created_at: z.date(),
+  updated_at: z.date(),
 });
 
 export type YoonbeeseoUserEntity = z.infer<typeof YoonbeeseoUserEntitySchema>;
@@ -21,3 +23,9 @@ export const YoonbeeseoUserSchema = YoonbeeseoUserEntitySchema.extend({
 });
 
 export type YoonbeeseoUser = z.infer<typeof YoonbeeseoUserSchema>;
+
+export const YoonbeeseoUserPayloadSchema = YoonbeeseoUserSchema.omit({
+  uid: true,
+  created_at: true,
+  updated_at: true,
+});

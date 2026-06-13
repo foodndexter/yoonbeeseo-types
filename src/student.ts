@@ -33,6 +33,7 @@ export const PaymentEntitySchema = z.object({
   payment_methos: PaymentMethodSchema.nullable(),
   total_amount: z.string(),
   updated_at: z.date(),
+  payment_id: z.uuid().nullable(),
 });
 
 export type PaymentEntity = z.infer<typeof PaymentEntitySchema>;

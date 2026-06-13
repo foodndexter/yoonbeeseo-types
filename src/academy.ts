@@ -1,16 +1,36 @@
 import { z } from "zod";
 
-export const AdminRoleSchema = z.enum(["OWNER", "ADMIN", "TEACHER"]);
+export const AdminRoleSchema = z.enum([
+  "OWNER",
+  "CO_ONWER",
+  "ADMIN",
+  "TEACHER",
+]);
 
 export type AdminRole = z.infer<typeof AdminRoleSchema>;
 
-export const adminRoles: AdminRole[] = ["OWNER", "ADMIN", "TEACHER"];
+export const adminRoles: AdminRole[] = [
+  "OWNER",
+  "CO_ONWER",
+  "ADMIN",
+  "TEACHER",
+];
 
-export const AdminRoleKorSchema = z.enum(["대표자", "관리자", "선생님"]);
+export const AdminRoleKorSchema = z.enum([
+  "대표자",
+  "공동대표",
+  "관리자",
+  "선생님",
+]);
 
 export type AdminRoleKor = z.infer<typeof AdminRoleKorSchema>;
 
-export const adminRolesKor: AdminRoleKor[] = ["대표자", "관리자", "선생님"];
+export const adminRolesKor: AdminRoleKor[] = [
+  "대표자",
+  "공동대표",
+  "관리자",
+  "선생님",
+];
 
 export const AdminEntitySchema = z.object({
   academy_id: z.uuid(),

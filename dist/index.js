@@ -1,9 +1,29 @@
 // src/academy.ts
 import { z } from "zod";
-var AdminRoleSchema = z.enum(["OWNER", "ADMIN", "TEACHER"]);
-var adminRoles = ["OWNER", "ADMIN", "TEACHER"];
-var AdminRoleKorSchema = z.enum(["\uB300\uD45C\uC790", "\uAD00\uB9AC\uC790", "\uC120\uC0DD\uB2D8"]);
-var adminRolesKor = ["\uB300\uD45C\uC790", "\uAD00\uB9AC\uC790", "\uC120\uC0DD\uB2D8"];
+var AdminRoleSchema = z.enum([
+  "OWNER",
+  "CO_ONWER",
+  "ADMIN",
+  "TEACHER"
+]);
+var adminRoles = [
+  "OWNER",
+  "CO_ONWER",
+  "ADMIN",
+  "TEACHER"
+];
+var AdminRoleKorSchema = z.enum([
+  "\uB300\uD45C\uC790",
+  "\uACF5\uB3D9\uB300\uD45C",
+  "\uAD00\uB9AC\uC790",
+  "\uC120\uC0DD\uB2D8"
+]);
+var adminRolesKor = [
+  "\uB300\uD45C\uC790",
+  "\uACF5\uB3D9\uB300\uD45C",
+  "\uAD00\uB9AC\uC790",
+  "\uC120\uC0DD\uB2D8"
+];
 var AdminEntitySchema = z.object({
   academy_id: z.uuid(),
   user_id: z.uuid(),
@@ -258,7 +278,8 @@ var PaymentEntitySchema = z5.object({
   paid_at: z5.date().nullable(),
   payment_methos: PaymentMethodSchema.nullable(),
   total_amount: z5.string(),
-  updated_at: z5.date()
+  updated_at: z5.date(),
+  payment_id: z5.uuid().nullable()
 });
 var StudentPaymentEntitySchema = z5.object({
   payment_id: z5.uuid(),
@@ -321,11 +342,18 @@ var YoonbeeseoUserEntitySchema = z6.object({
   email: z6.email(),
   mobile: z6.string().length(11).startsWith("010"),
   name: z6.string(),
-  dob: z6.string().length(8).nullable()
+  dob: z6.string().length(8).nullable(),
+  created_at: z6.date(),
+  updated_at: z6.date()
 });
 var YoonbeeseoUserSchema = YoonbeeseoUserEntitySchema.extend({
   roles: z6.array(UserRoleSchema),
   academies: z6.array(UserAcademySchema)
+});
+var YoonbeeseoUserPayloadSchema = YoonbeeseoUserSchema.omit({
+  uid: true,
+  created_at: true,
+  updated_at: true
 });
 export {
   AcademyAddressSchema,
@@ -374,6 +402,7 @@ export {
   UserRoleSchema,
   UserStudentSchema,
   YoonbeeseoUserEntitySchema,
+  YoonbeeseoUserPayloadSchema,
   YoonbeeseoUserSchema,
   academyQuery,
   adminRoles,

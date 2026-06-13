@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 declare const AdminRoleSchema: z.ZodEnum<{
     OWNER: "OWNER";
+    CO_ONWER: "CO_ONWER";
     ADMIN: "ADMIN";
     TEACHER: "TEACHER";
 }>;
@@ -9,6 +10,7 @@ type AdminRole = z.infer<typeof AdminRoleSchema>;
 declare const adminRoles: AdminRole[];
 declare const AdminRoleKorSchema: z.ZodEnum<{
     대표자: "대표자";
+    공동대표: "공동대표";
     관리자: "관리자";
     선생님: "선생님";
 }>;
@@ -19,6 +21,7 @@ declare const AdminEntitySchema: z.ZodObject<{
     user_id: z.ZodUUID;
     role: z.ZodEnum<{
         OWNER: "OWNER";
+        CO_ONWER: "CO_ONWER";
         ADMIN: "ADMIN";
         TEACHER: "TEACHER";
     }>;
@@ -48,6 +51,7 @@ declare const UserAcademySchema: z.ZodObject<{
     tels: z.ZodArray<z.ZodString>;
     role: z.ZodEnum<{
         OWNER: "OWNER";
+        CO_ONWER: "CO_ONWER";
         ADMIN: "ADMIN";
         TEACHER: "TEACHER";
     }>;
@@ -56,6 +60,7 @@ type UserAcademy = z.infer<typeof UserAcademySchema>;
 declare const AcademyPayloadSchema: z.ZodObject<{
     role: z.ZodEnum<{
         OWNER: "OWNER";
+        CO_ONWER: "CO_ONWER";
         ADMIN: "ADMIN";
         TEACHER: "TEACHER";
     }>;
@@ -408,6 +413,7 @@ declare const PaymentEntitySchema: z.ZodObject<{
     }>>;
     total_amount: z.ZodString;
     updated_at: z.ZodDate;
+    payment_id: z.ZodNullable<z.ZodUUID>;
 }, z.core.$strip>;
 type PaymentEntity = z.infer<typeof PaymentEntitySchema>;
 declare const StudentPaymentEntitySchema: z.ZodObject<{
@@ -448,6 +454,7 @@ declare const PaymentPayloadSchema: z.ZodObject<{
         CASH: "CASH";
     }>>;
     total_amount: z.ZodString;
+    payment_id: z.ZodNullable<z.ZodUUID>;
     items: z.ZodArray<z.ZodObject<{
         title: z.ZodString;
         quan: z.ZodNumber;
@@ -464,6 +471,7 @@ declare const PaymentUpdatePayloadSchema: z.ZodObject<{
         paid_at: "paid_at";
         payment_methos: "payment_methos";
         total_amount: "total_amount";
+        payment_id: "payment_id";
         items: "items";
     }>;
     value: z.ZodAny;
@@ -483,6 +491,7 @@ declare const PaymentSchema: z.ZodObject<{
         CASH: "CASH";
     }>>;
     total_amount: z.ZodString;
+    payment_id: z.ZodNullable<z.ZodUUID>;
     items: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         title: z.ZodString;
@@ -514,6 +523,7 @@ declare const UserStudentSchema: z.ZodObject<{
             CASH: "CASH";
         }>>;
         total_amount: z.ZodString;
+        payment_id: z.ZodNullable<z.ZodUUID>;
         items: z.ZodArray<z.ZodObject<{
             id: z.ZodUUID;
             title: z.ZodString;
@@ -597,6 +607,7 @@ declare const StudentPayloadSchema: z.ZodObject<{
             CASH: "CASH";
         }>>;
         total_amount: z.ZodString;
+        payment_id: z.ZodNullable<z.ZodUUID>;
         items: z.ZodArray<z.ZodObject<{
             id: z.ZodUUID;
             title: z.ZodString;
@@ -690,6 +701,8 @@ declare const YoonbeeseoUserEntitySchema: z.ZodObject<{
     mobile: z.ZodString;
     name: z.ZodString;
     dob: z.ZodNullable<z.ZodString>;
+    created_at: z.ZodDate;
+    updated_at: z.ZodDate;
 }, z.core.$strip>;
 type YoonbeeseoUserEntity = z.infer<typeof YoonbeeseoUserEntitySchema>;
 declare const YoonbeeseoUserSchema: z.ZodObject<{
@@ -697,6 +710,39 @@ declare const YoonbeeseoUserSchema: z.ZodObject<{
     email: z.ZodEmail;
     mobile: z.ZodString;
     name: z.ZodString;
+    dob: z.ZodNullable<z.ZodString>;
+    created_at: z.ZodDate;
+    updated_at: z.ZodDate;
+    roles: z.ZodArray<z.ZodEnum<{
+        TEACHER: "TEACHER";
+        BIZ: "BIZ";
+        STUDENT: "STUDENT";
+        PARENT: "PARENT";
+    }>>;
+    academies: z.ZodArray<z.ZodObject<{
+        id: z.ZodUUID;
+        name: z.ZodString;
+        ceo: z.ZodString;
+        regi: z.ZodString;
+        address: z.ZodNullable<z.ZodObject<{}, z.core.$strip>>;
+        created_at: z.ZodDate;
+        updated_at: z.ZodDate;
+        subject: z.ZodArray<z.ZodString>;
+        emails: z.ZodArray<z.ZodEmail>;
+        tels: z.ZodArray<z.ZodString>;
+        role: z.ZodEnum<{
+            OWNER: "OWNER";
+            CO_ONWER: "CO_ONWER";
+            ADMIN: "ADMIN";
+            TEACHER: "TEACHER";
+        }>;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
+type YoonbeeseoUser = z.infer<typeof YoonbeeseoUserSchema>;
+declare const YoonbeeseoUserPayloadSchema: z.ZodObject<{
+    name: z.ZodString;
+    email: z.ZodEmail;
+    mobile: z.ZodString;
     dob: z.ZodNullable<z.ZodString>;
     roles: z.ZodArray<z.ZodEnum<{
         TEACHER: "TEACHER";
@@ -717,11 +763,11 @@ declare const YoonbeeseoUserSchema: z.ZodObject<{
         tels: z.ZodArray<z.ZodString>;
         role: z.ZodEnum<{
             OWNER: "OWNER";
+            CO_ONWER: "CO_ONWER";
             ADMIN: "ADMIN";
             TEACHER: "TEACHER";
         }>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
-type YoonbeeseoUser = z.infer<typeof YoonbeeseoUserSchema>;
 
-export { AcademyAddressSchema, type AcademyEntity, AcademyEntitySchema, type AcademyPayload, AcademyPayloadSchema, type AcademyUpdatePayload, AcademyUpdatePayloadSchema, type AdminEntity, AdminEntitySchema, type AdminRole, type AdminRoleKor, AdminRoleKorSchema, AdminRoleSchema, type Lesson, type LessonEntity, LessonEntitySchema, type LessonPayload, LessonPayloadSchema, LessonSchema, type LessonSort, type LessonSortKor, LessonSortKorSchema, LessonSortSchema, LessonSortsKor, LessonUpdatePayloadSchema, type Parent, type ParentEntity, ParentEntitySchema, type ParentPayload, ParentPayloadSchema, ParentSchema, type ParentUpdatePayload, ParentUpdatePayloadSchema, type PaymentEntity, PaymentEntitySchema, type PaymentItem, type PaymentItemEntity, PaymentItemEntitySchema, type PaymentItemPayload, PaymentItemPayloadSchema, PaymentItemSchema, type PaymentMethod, PaymentMethodSchema, type PaymentPayload, PaymentPayloadSchema, PaymentSchema, type PaymentUpdatePayload, PaymentUpdatePayloadSchema, type Relationship, RelationshipSchema, type SchoolEntity, SchoolEntitySchema, type SchoolPayload, SchoolPayloadSchema, type SchoolSort, type SchoolSortKor, SchoolSortKorSchema, SchoolSortSchema, type SchoolUploadPayload, SchoolUploadPayloadSchema, type StudentEntity, StudentEntitySchema, type StudentLessonEntity, StudentLessonEntitySchema, type StudentPayload, StudentPayloadSchema, type StudentPaymentEntity, StudentPaymentEntitySchema, type StudentSchool, type StudentSchoolDesc, StudentSchoolDescSchema, type StudentSchoolEntity, StudentSchoolEntitySchema, type StudentSchoolPayload, StudentSchoolPayloadSchema, StudentSchoolSchema, type StudentSchoolUploadPayload, StudentSchoolUploadPayloadSchema, type StudentUpdatePayload, StudentUpdatePayloadSchema, type UserAcademy, UserAcademySchema, type UserRole, UserRoleSchema, type UserStudent, UserStudentSchema, type YoonbeeseoUser, type YoonbeeseoUserEntity, YoonbeeseoUserEntitySchema, YoonbeeseoUserSchema, academyQuery, adminRoles, adminRolesKor, initialAcademy, initialSchool, initialStudentSchool, lessonSorts, paymentMehods, relationships, schoolDescs, schoolSorts, schoolSortsKor, userRoles };
+export { AcademyAddressSchema, type AcademyEntity, AcademyEntitySchema, type AcademyPayload, AcademyPayloadSchema, type AcademyUpdatePayload, AcademyUpdatePayloadSchema, type AdminEntity, AdminEntitySchema, type AdminRole, type AdminRoleKor, AdminRoleKorSchema, AdminRoleSchema, type Lesson, type LessonEntity, LessonEntitySchema, type LessonPayload, LessonPayloadSchema, LessonSchema, type LessonSort, type LessonSortKor, LessonSortKorSchema, LessonSortSchema, LessonSortsKor, LessonUpdatePayloadSchema, type Parent, type ParentEntity, ParentEntitySchema, type ParentPayload, ParentPayloadSchema, ParentSchema, type ParentUpdatePayload, ParentUpdatePayloadSchema, type PaymentEntity, PaymentEntitySchema, type PaymentItem, type PaymentItemEntity, PaymentItemEntitySchema, type PaymentItemPayload, PaymentItemPayloadSchema, PaymentItemSchema, type PaymentMethod, PaymentMethodSchema, type PaymentPayload, PaymentPayloadSchema, PaymentSchema, type PaymentUpdatePayload, PaymentUpdatePayloadSchema, type Relationship, RelationshipSchema, type SchoolEntity, SchoolEntitySchema, type SchoolPayload, SchoolPayloadSchema, type SchoolSort, type SchoolSortKor, SchoolSortKorSchema, SchoolSortSchema, type SchoolUploadPayload, SchoolUploadPayloadSchema, type StudentEntity, StudentEntitySchema, type StudentLessonEntity, StudentLessonEntitySchema, type StudentPayload, StudentPayloadSchema, type StudentPaymentEntity, StudentPaymentEntitySchema, type StudentSchool, type StudentSchoolDesc, StudentSchoolDescSchema, type StudentSchoolEntity, StudentSchoolEntitySchema, type StudentSchoolPayload, StudentSchoolPayloadSchema, StudentSchoolSchema, type StudentSchoolUploadPayload, StudentSchoolUploadPayloadSchema, type StudentUpdatePayload, StudentUpdatePayloadSchema, type UserAcademy, UserAcademySchema, type UserRole, UserRoleSchema, type UserStudent, UserStudentSchema, type YoonbeeseoUser, type YoonbeeseoUserEntity, YoonbeeseoUserEntitySchema, YoonbeeseoUserPayloadSchema, YoonbeeseoUserSchema, academyQuery, adminRoles, adminRolesKor, initialAcademy, initialSchool, initialStudentSchool, lessonSorts, paymentMehods, relationships, schoolDescs, schoolSorts, schoolSortsKor, userRoles };
