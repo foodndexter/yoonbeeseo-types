@@ -3,7 +3,7 @@ import { z } from "zod";
 export const LessonSortSchema = z.enum([
   "PRE",
   "PRIMARY",
-  "INTER_MEDIATE",
+  "MIDDLE",
   "HIGH",
   "ADULT",
 ]);
@@ -11,7 +11,7 @@ export type LessonSort = z.infer<typeof LessonSortSchema>;
 export const lessonSorts: LessonSort[] = [
   "PRE",
   "PRIMARY",
-  "INTER_MEDIATE",
+  "MIDDLE",
   "HIGH",
   "ADULT",
 ];

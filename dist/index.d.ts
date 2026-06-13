@@ -96,7 +96,7 @@ declare const academyQuery: {
 declare const LessonSortSchema: z.ZodEnum<{
     PRE: "PRE";
     PRIMARY: "PRIMARY";
-    INTER_MEDIATE: "INTER_MEDIATE";
+    MIDDLE: "MIDDLE";
     HIGH: "HIGH";
     ADULT: "ADULT";
 }>;
@@ -118,7 +118,7 @@ declare const LessonEntitySchema: z.ZodObject<{
     sort: z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        INTER_MEDIATE: "INTER_MEDIATE";
+        MIDDLE: "MIDDLE";
         HIGH: "HIGH";
         ADULT: "ADULT";
     }>;
@@ -140,7 +140,7 @@ declare const LessonSchema: z.ZodObject<{
     sort: z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        INTER_MEDIATE: "INTER_MEDIATE";
+        MIDDLE: "MIDDLE";
         HIGH: "HIGH";
         ADULT: "ADULT";
     }>;
@@ -156,7 +156,7 @@ declare const LessonPayloadSchema: z.ZodObject<{
     sort: z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        INTER_MEDIATE: "INTER_MEDIATE";
+        MIDDLE: "MIDDLE";
         HIGH: "HIGH";
         ADULT: "ADULT";
     }>;
@@ -247,8 +247,8 @@ type ParentUpdatePayload = z.infer<typeof ParentUpdatePayloadSchema>;
 declare const SchoolSortSchema: z.ZodEnum<{
     PRE: "PRE";
     PRIMARY: "PRIMARY";
-    HIGH: "HIGH";
     MIDDLE: "MIDDLE";
+    HIGH: "HIGH";
     UNI: "UNI";
     WORK: "WORK";
 }>;
@@ -271,8 +271,8 @@ declare const SchoolEntitySchema: z.ZodObject<{
     sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        HIGH: "HIGH";
         MIDDLE: "MIDDLE";
+        HIGH: "HIGH";
         UNI: "UNI";
         WORK: "WORK";
     }>, z.ZodString]>;
@@ -295,8 +295,8 @@ declare const SchoolPayloadSchema: z.ZodObject<{
     sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        HIGH: "HIGH";
         MIDDLE: "MIDDLE";
+        HIGH: "HIGH";
         UNI: "UNI";
         WORK: "WORK";
     }>, z.ZodString]>;
@@ -319,8 +319,8 @@ declare const StudentSchoolSchema: z.ZodObject<{
     sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        HIGH: "HIGH";
         MIDDLE: "MIDDLE";
+        HIGH: "HIGH";
         UNI: "UNI";
         WORK: "WORK";
     }>, z.ZodString]>;
@@ -339,8 +339,8 @@ declare const StudentSchoolPayloadSchema: z.ZodObject<{
     sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
-        HIGH: "HIGH";
         MIDDLE: "MIDDLE";
+        HIGH: "HIGH";
         UNI: "UNI";
         WORK: "WORK";
     }>, z.ZodString]>;
@@ -540,7 +540,7 @@ declare const UserStudentSchema: z.ZodObject<{
         sort: z.ZodEnum<{
             PRE: "PRE";
             PRIMARY: "PRIMARY";
-            INTER_MEDIATE: "INTER_MEDIATE";
+            MIDDLE: "MIDDLE";
             HIGH: "HIGH";
             ADULT: "ADULT";
         }>;
@@ -557,8 +557,8 @@ declare const UserStudentSchema: z.ZodObject<{
         sort: z.ZodUnion<[z.ZodEnum<{
             PRE: "PRE";
             PRIMARY: "PRIMARY";
-            HIGH: "HIGH";
             MIDDLE: "MIDDLE";
+            HIGH: "HIGH";
             UNI: "UNI";
             WORK: "WORK";
         }>, z.ZodString]>;
@@ -624,7 +624,7 @@ declare const StudentPayloadSchema: z.ZodObject<{
         sort: z.ZodEnum<{
             PRE: "PRE";
             PRIMARY: "PRIMARY";
-            INTER_MEDIATE: "INTER_MEDIATE";
+            MIDDLE: "MIDDLE";
             HIGH: "HIGH";
             ADULT: "ADULT";
         }>;
@@ -641,8 +641,8 @@ declare const StudentPayloadSchema: z.ZodObject<{
         sort: z.ZodUnion<[z.ZodEnum<{
             PRE: "PRE";
             PRIMARY: "PRIMARY";
-            HIGH: "HIGH";
             MIDDLE: "MIDDLE";
+            HIGH: "HIGH";
             UNI: "UNI";
             WORK: "WORK";
         }>, z.ZodString]>;

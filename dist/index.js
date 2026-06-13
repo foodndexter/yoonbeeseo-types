@@ -79,14 +79,14 @@ import { z as z2 } from "zod";
 var LessonSortSchema = z2.enum([
   "PRE",
   "PRIMARY",
-  "INTER_MEDIATE",
+  "MIDDLE",
   "HIGH",
   "ADULT"
 ]);
 var lessonSorts = [
   "PRE",
   "PRIMARY",
-  "INTER_MEDIATE",
+  "MIDDLE",
   "HIGH",
   "ADULT"
 ];
