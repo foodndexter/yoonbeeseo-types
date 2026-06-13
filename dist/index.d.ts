@@ -386,7 +386,7 @@ declare const StudentEntitySchema: z.ZodObject<{
     mobile: z.ZodString;
     payment_date: z.ZodNumber;
     enrolled_at: z.ZodDate;
-    discharged_at: z.ZodDate;
+    discharged_at: z.ZodNullable<z.ZodDate>;
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
 }, z.core.$strip>;
@@ -508,7 +508,7 @@ declare const UserStudentSchema: z.ZodObject<{
     dob: z.ZodNullable<z.ZodString>;
     payment_date: z.ZodNumber;
     enrolled_at: z.ZodDate;
-    discharged_at: z.ZodDate;
+    discharged_at: z.ZodNullable<z.ZodDate>;
     payments: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         updated_at: z.ZodDate;
@@ -592,7 +592,7 @@ declare const StudentPayloadSchema: z.ZodObject<{
     dob: z.ZodNullable<z.ZodString>;
     payment_date: z.ZodNumber;
     enrolled_at: z.ZodDate;
-    discharged_at: z.ZodDate;
+    discharged_at: z.ZodNullable<z.ZodDate>;
     payments: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         updated_at: z.ZodDate;

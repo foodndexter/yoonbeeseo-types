@@ -262,7 +262,7 @@ var StudentEntitySchema = z5.object({
   mobile: z5.string().length(11).startsWith("010"),
   payment_date: z5.number().min(1).max(31),
   enrolled_at: z5.date(),
-  discharged_at: z5.date(),
+  discharged_at: z5.date().nullable(),
   created_at: z5.date(),
   updated_at: z5.date()
 });

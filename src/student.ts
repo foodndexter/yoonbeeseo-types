@@ -22,6 +22,26 @@ export const PaymentMethodSchema = z.enum(["CARD", "BANK_TRANSFER", "CASH"]);
 export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
 export const paymentMehods: PaymentMethod[] = ["CARD", "BANK_TRANSFER", "CASH"];
 
+export const PaymentStatusSchema = z.enum([
+  "NOT_DUE",
+  "DUE",
+  "OVER_DUE",
+  "PENDING",
+  "ERROR",
+  "SUSPENDED",
+  "PAID",
+]);
+export type PaymentStatus = z.infer<typeof PaymentStatusSchema>;
+export const paymentStatus: PaymentStatus[] = [
+  "NOT_DUE",
+  "DUE",
+  "OVER_DUE",
+  "PENDING",
+  "ERROR",
+  "SUSPENDED",
+  "PAID",
+];
+
 export const PaymentEntitySchema = z.object({
   id: z.uuid(),
   academy_id: z.uuid(),
@@ -30,10 +50,11 @@ export const PaymentEntitySchema = z.object({
   issued_at: z.date(),
   billing_at: z.date(),
   paid_at: z.date().nullable(),
-  payment_methos: PaymentMethodSchema.nullable(),
+  payment_method: PaymentMethodSchema.nullable(),
   total_amount: z.string(),
   updated_at: z.date(),
   payment_id: z.uuid().nullable(),
+  payment_status: PaymentStatusSchema,
 });
 
 export type PaymentEntity = z.infer<typeof PaymentEntitySchema>;
