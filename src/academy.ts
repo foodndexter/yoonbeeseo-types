@@ -55,10 +55,10 @@ export const AcademyEntitySchema = z.object({
 export type AcademyEntity = z.infer<typeof AcademyEntitySchema>;
 
 export const UserAcademySchema = AcademyEntitySchema.extend({
-  subject: z.array(z.string()),
+  subjects: z.array(z.string()),
   emails: z.array(z.email()),
   tels: z.array(z.string()),
-  role: AdminRoleSchema,
+  role: AdminRoleSchema.or(z.string()),
 });
 
 export type UserAcademy = z.infer<typeof UserAcademySchema>;
@@ -70,17 +70,6 @@ export const AcademyPayloadSchema = UserAcademySchema.omit({
 });
 
 export type AcademyPayload = z.infer<typeof AcademyPayloadSchema>;
-
-export const initialAcademy: AcademyPayload = {
-  address: null,
-  ceo: "",
-  emails: [],
-  name: "",
-  regi: "",
-  role: "OWNER",
-  subject: [],
-  tels: [],
-};
 
 export const AcademyUpdatePayloadSchema = z.object({
   target: AcademyPayloadSchema.keyof(),
@@ -97,4 +86,15 @@ const academy = `id, name, ceo, regi, address, created_at, updated_at,
 export const academyQuery = {
   academy,
   admin: `${academy}, role:academy_admin(role)`,
+};
+
+export const initialAcademy: AcademyPayload = {
+  address: null,
+  ceo: "",
+  emails: [],
+  name: "",
+  regi: "",
+  role: "",
+  subjects: [],
+  tels: [],
 };

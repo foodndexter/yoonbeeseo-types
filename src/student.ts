@@ -46,14 +46,14 @@ export const PaymentEntitySchema = z.object({
   id: z.uuid(),
   academy_id: z.uuid(),
   title: z.string(),
-  desc: z.string().nullable(),
+  description: z.string().nullable(),
   issued_at: z.date(),
   billing_at: z.date(),
   paid_at: z.date().nullable(),
   payment_method: PaymentMethodSchema.nullable(),
-  total_amount: z.string(),
+  total_amount: z.number().min(0),
   updated_at: z.date(),
-  payment_id: z.uuid().nullable(),
+  transaction_id: z.uuid().nullable(),
   payment_status: PaymentStatusSchema,
 });
 
@@ -70,8 +70,8 @@ export const PaymentItemEntitySchema = z.object({
   id: z.uuid(),
   payment_id: z.uuid(),
   title: z.string(),
-  quan: z.number().min(1),
-  amount: z.string(),
+  quantity: z.number().min(1),
+  amount: z.number().min(0),
 });
 
 export type PaymentItemEntity = z.infer<typeof PaymentItemEntitySchema>;
@@ -91,8 +91,6 @@ export const PaymentPayloadSchema = PaymentEntitySchema.omit({
   id: true,
   issued_at: true,
   updated_at: true,
-}).extend({
-  items: z.array(PaymentItemPayloadSchema),
 });
 
 export type PaymentPayload = z.infer<typeof PaymentPayloadSchema>;
@@ -133,3 +131,34 @@ export const StudentUpdatePayloadSchema = z.object({
   value: z.any(),
 });
 export type StudentUpdatePayload = z.infer<typeof StudentUpdatePayloadSchema>;
+
+export const initialStudent: StudentPayload = {
+  discharged_at: null,
+  dob: null,
+  enrolled_at: new Date(),
+  lessons: [],
+  mobile: "",
+  name: "",
+  parents: [],
+  payment_date: new Date().getDate(),
+  payments: [],
+  schools: [],
+};
+
+export const initialPayment: PaymentPayload = {
+  academy_id: "",
+  billing_at: new Date(),
+  description: "",
+  paid_at: null,
+  payment_method: null,
+  payment_status: "DUE",
+  title: "",
+  total_amount: 0,
+  transaction_id: null,
+};
+
+export const initialPaymentItem: PaymentItemPayload = {
+  amount: 0,
+  quantity: 1,
+  title: "",
+};

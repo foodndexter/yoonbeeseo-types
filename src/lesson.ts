@@ -36,7 +36,7 @@ export const LessonEntitySchema = z.object({
   id: z.uuid(),
   academy_id: z.uuid(),
   name: z.string(),
-  sort: LessonSortSchema,
+  sort: LessonSortSchema.or(z.string()),
   subject: z.string(),
   price: z.number().min(0),
   length_per_lesson: z.number().min(0),
@@ -71,3 +71,13 @@ export const StudentLessonEntitySchema = z.object({
 });
 
 export type StudentLessonEntity = z.infer<typeof StudentLessonEntitySchema>;
+
+export const initialLesson: LessonPayload = {
+  count_per_month: 1,
+  count_per_week: 1,
+  length_per_lesson: 1,
+  name: "",
+  price: 0,
+  sort: "",
+  subject: "",
+};

@@ -398,6 +398,17 @@ declare const PaymentMethodSchema: z.ZodEnum<{
 }>;
 type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
 declare const paymentMehods: PaymentMethod[];
+declare const PaymentStatusSchema: z.ZodEnum<{
+    NOT_DUE: "NOT_DUE";
+    DUE: "DUE";
+    OVER_DUE: "OVER_DUE";
+    PENDING: "PENDING";
+    ERROR: "ERROR";
+    SUSPENDED: "SUSPENDED";
+    PAID: "PAID";
+}>;
+type PaymentStatus = z.infer<typeof PaymentStatusSchema>;
+declare const paymentStatus: PaymentStatus[];
 declare const PaymentEntitySchema: z.ZodObject<{
     id: z.ZodUUID;
     academy_id: z.ZodUUID;
@@ -406,7 +417,7 @@ declare const PaymentEntitySchema: z.ZodObject<{
     issued_at: z.ZodDate;
     billing_at: z.ZodDate;
     paid_at: z.ZodNullable<z.ZodDate>;
-    payment_methos: z.ZodNullable<z.ZodEnum<{
+    payment_method: z.ZodNullable<z.ZodEnum<{
         CARD: "CARD";
         BANK_TRANSFER: "BANK_TRANSFER";
         CASH: "CASH";
@@ -414,6 +425,15 @@ declare const PaymentEntitySchema: z.ZodObject<{
     total_amount: z.ZodString;
     updated_at: z.ZodDate;
     payment_id: z.ZodNullable<z.ZodUUID>;
+    payment_status: z.ZodEnum<{
+        NOT_DUE: "NOT_DUE";
+        DUE: "DUE";
+        OVER_DUE: "OVER_DUE";
+        PENDING: "PENDING";
+        ERROR: "ERROR";
+        SUSPENDED: "SUSPENDED";
+        PAID: "PAID";
+    }>;
 }, z.core.$strip>;
 type PaymentEntity = z.infer<typeof PaymentEntitySchema>;
 declare const StudentPaymentEntitySchema: z.ZodObject<{
@@ -444,11 +464,20 @@ declare const PaymentItemSchema: z.ZodObject<{
 type PaymentItem = z.infer<typeof PaymentItemSchema>;
 declare const PaymentPayloadSchema: z.ZodObject<{
     academy_id: z.ZodUUID;
+    payment_status: z.ZodEnum<{
+        NOT_DUE: "NOT_DUE";
+        DUE: "DUE";
+        OVER_DUE: "OVER_DUE";
+        PENDING: "PENDING";
+        ERROR: "ERROR";
+        SUSPENDED: "SUSPENDED";
+        PAID: "PAID";
+    }>;
     title: z.ZodString;
     desc: z.ZodNullable<z.ZodString>;
     billing_at: z.ZodDate;
     paid_at: z.ZodNullable<z.ZodDate>;
-    payment_methos: z.ZodNullable<z.ZodEnum<{
+    payment_method: z.ZodNullable<z.ZodEnum<{
         CARD: "CARD";
         BANK_TRANSFER: "BANK_TRANSFER";
         CASH: "CASH";
@@ -465,11 +494,12 @@ type PaymentPayload = z.infer<typeof PaymentPayloadSchema>;
 declare const PaymentUpdatePayloadSchema: z.ZodObject<{
     target: z.ZodEnum<{
         academy_id: "academy_id";
+        payment_status: "payment_status";
         title: "title";
         desc: "desc";
         billing_at: "billing_at";
         paid_at: "paid_at";
-        payment_methos: "payment_methos";
+        payment_method: "payment_method";
         total_amount: "total_amount";
         payment_id: "payment_id";
         items: "items";
@@ -480,12 +510,21 @@ type PaymentUpdatePayload = z.infer<typeof PaymentUpdatePayloadSchema>;
 declare const PaymentSchema: z.ZodObject<{
     id: z.ZodUUID;
     updated_at: z.ZodDate;
+    payment_status: z.ZodEnum<{
+        NOT_DUE: "NOT_DUE";
+        DUE: "DUE";
+        OVER_DUE: "OVER_DUE";
+        PENDING: "PENDING";
+        ERROR: "ERROR";
+        SUSPENDED: "SUSPENDED";
+        PAID: "PAID";
+    }>;
     title: z.ZodString;
     desc: z.ZodNullable<z.ZodString>;
     issued_at: z.ZodDate;
     billing_at: z.ZodDate;
     paid_at: z.ZodNullable<z.ZodDate>;
-    payment_methos: z.ZodNullable<z.ZodEnum<{
+    payment_method: z.ZodNullable<z.ZodEnum<{
         CARD: "CARD";
         BANK_TRANSFER: "BANK_TRANSFER";
         CASH: "CASH";
@@ -512,12 +551,21 @@ declare const UserStudentSchema: z.ZodObject<{
     payments: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         updated_at: z.ZodDate;
+        payment_status: z.ZodEnum<{
+            NOT_DUE: "NOT_DUE";
+            DUE: "DUE";
+            OVER_DUE: "OVER_DUE";
+            PENDING: "PENDING";
+            ERROR: "ERROR";
+            SUSPENDED: "SUSPENDED";
+            PAID: "PAID";
+        }>;
         title: z.ZodString;
         desc: z.ZodNullable<z.ZodString>;
         issued_at: z.ZodDate;
         billing_at: z.ZodDate;
         paid_at: z.ZodNullable<z.ZodDate>;
-        payment_methos: z.ZodNullable<z.ZodEnum<{
+        payment_method: z.ZodNullable<z.ZodEnum<{
             CARD: "CARD";
             BANK_TRANSFER: "BANK_TRANSFER";
             CASH: "CASH";
@@ -596,12 +644,21 @@ declare const StudentPayloadSchema: z.ZodObject<{
     payments: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         updated_at: z.ZodDate;
+        payment_status: z.ZodEnum<{
+            NOT_DUE: "NOT_DUE";
+            DUE: "DUE";
+            OVER_DUE: "OVER_DUE";
+            PENDING: "PENDING";
+            ERROR: "ERROR";
+            SUSPENDED: "SUSPENDED";
+            PAID: "PAID";
+        }>;
         title: z.ZodString;
         desc: z.ZodNullable<z.ZodString>;
         issued_at: z.ZodDate;
         billing_at: z.ZodDate;
         paid_at: z.ZodNullable<z.ZodDate>;
-        payment_methos: z.ZodNullable<z.ZodEnum<{
+        payment_method: z.ZodNullable<z.ZodEnum<{
             CARD: "CARD";
             BANK_TRANSFER: "BANK_TRANSFER";
             CASH: "CASH";
@@ -770,4 +827,4 @@ declare const YoonbeeseoUserPayloadSchema: z.ZodObject<{
     }, z.core.$strip>>;
 }, z.core.$strip>;
 
-export { AcademyAddressSchema, type AcademyEntity, AcademyEntitySchema, type AcademyPayload, AcademyPayloadSchema, type AcademyUpdatePayload, AcademyUpdatePayloadSchema, type AdminEntity, AdminEntitySchema, type AdminRole, type AdminRoleKor, AdminRoleKorSchema, AdminRoleSchema, type Lesson, type LessonEntity, LessonEntitySchema, type LessonPayload, LessonPayloadSchema, LessonSchema, type LessonSort, type LessonSortKor, LessonSortKorSchema, LessonSortSchema, LessonSortsKor, LessonUpdatePayloadSchema, type Parent, type ParentEntity, ParentEntitySchema, type ParentPayload, ParentPayloadSchema, ParentSchema, type ParentUpdatePayload, ParentUpdatePayloadSchema, type PaymentEntity, PaymentEntitySchema, type PaymentItem, type PaymentItemEntity, PaymentItemEntitySchema, type PaymentItemPayload, PaymentItemPayloadSchema, PaymentItemSchema, type PaymentMethod, PaymentMethodSchema, type PaymentPayload, PaymentPayloadSchema, PaymentSchema, type PaymentUpdatePayload, PaymentUpdatePayloadSchema, type Relationship, RelationshipSchema, type SchoolEntity, SchoolEntitySchema, type SchoolPayload, SchoolPayloadSchema, type SchoolSort, type SchoolSortKor, SchoolSortKorSchema, SchoolSortSchema, type SchoolUploadPayload, SchoolUploadPayloadSchema, type StudentEntity, StudentEntitySchema, type StudentLessonEntity, StudentLessonEntitySchema, type StudentPayload, StudentPayloadSchema, type StudentPaymentEntity, StudentPaymentEntitySchema, type StudentSchool, type StudentSchoolDesc, StudentSchoolDescSchema, type StudentSchoolEntity, StudentSchoolEntitySchema, type StudentSchoolPayload, StudentSchoolPayloadSchema, StudentSchoolSchema, type StudentSchoolUploadPayload, StudentSchoolUploadPayloadSchema, type StudentUpdatePayload, StudentUpdatePayloadSchema, type UserAcademy, UserAcademySchema, type UserRole, UserRoleSchema, type UserStudent, UserStudentSchema, type YoonbeeseoUser, type YoonbeeseoUserEntity, YoonbeeseoUserEntitySchema, YoonbeeseoUserPayloadSchema, YoonbeeseoUserSchema, academyQuery, adminRoles, adminRolesKor, initialAcademy, initialSchool, initialStudentSchool, lessonSorts, paymentMehods, relationships, schoolDescs, schoolSorts, schoolSortsKor, userRoles };
+export { AcademyAddressSchema, type AcademyEntity, AcademyEntitySchema, type AcademyPayload, AcademyPayloadSchema, type AcademyUpdatePayload, AcademyUpdatePayloadSchema, type AdminEntity, AdminEntitySchema, type AdminRole, type AdminRoleKor, AdminRoleKorSchema, AdminRoleSchema, type Lesson, type LessonEntity, LessonEntitySchema, type LessonPayload, LessonPayloadSchema, LessonSchema, type LessonSort, type LessonSortKor, LessonSortKorSchema, LessonSortSchema, LessonSortsKor, LessonUpdatePayloadSchema, type Parent, type ParentEntity, ParentEntitySchema, type ParentPayload, ParentPayloadSchema, ParentSchema, type ParentUpdatePayload, ParentUpdatePayloadSchema, type PaymentEntity, PaymentEntitySchema, type PaymentItem, type PaymentItemEntity, PaymentItemEntitySchema, type PaymentItemPayload, PaymentItemPayloadSchema, PaymentItemSchema, type PaymentMethod, PaymentMethodSchema, type PaymentPayload, PaymentPayloadSchema, PaymentSchema, type PaymentStatus, PaymentStatusSchema, type PaymentUpdatePayload, PaymentUpdatePayloadSchema, type Relationship, RelationshipSchema, type SchoolEntity, SchoolEntitySchema, type SchoolPayload, SchoolPayloadSchema, type SchoolSort, type SchoolSortKor, SchoolSortKorSchema, SchoolSortSchema, type SchoolUploadPayload, SchoolUploadPayloadSchema, type StudentEntity, StudentEntitySchema, type StudentLessonEntity, StudentLessonEntitySchema, type StudentPayload, StudentPayloadSchema, type StudentPaymentEntity, StudentPaymentEntitySchema, type StudentSchool, type StudentSchoolDesc, StudentSchoolDescSchema, type StudentSchoolEntity, StudentSchoolEntitySchema, type StudentSchoolPayload, StudentSchoolPayloadSchema, StudentSchoolSchema, type StudentSchoolUploadPayload, StudentSchoolUploadPayloadSchema, type StudentUpdatePayload, StudentUpdatePayloadSchema, type UserAcademy, UserAcademySchema, type UserRole, UserRoleSchema, type UserStudent, UserStudentSchema, type YoonbeeseoUser, type YoonbeeseoUserEntity, YoonbeeseoUserEntitySchema, YoonbeeseoUserPayloadSchema, YoonbeeseoUserSchema, academyQuery, adminRoles, adminRolesKor, initialAcademy, initialSchool, initialStudentSchool, lessonSorts, paymentMehods, paymentStatus, relationships, schoolDescs, schoolSorts, schoolSortsKor, userRoles };

@@ -268,6 +268,24 @@ var StudentEntitySchema = z5.object({
 });
 var PaymentMethodSchema = z5.enum(["CARD", "BANK_TRANSFER", "CASH"]);
 var paymentMehods = ["CARD", "BANK_TRANSFER", "CASH"];
+var PaymentStatusSchema = z5.enum([
+  "NOT_DUE",
+  "DUE",
+  "OVER_DUE",
+  "PENDING",
+  "ERROR",
+  "SUSPENDED",
+  "PAID"
+]);
+var paymentStatus = [
+  "NOT_DUE",
+  "DUE",
+  "OVER_DUE",
+  "PENDING",
+  "ERROR",
+  "SUSPENDED",
+  "PAID"
+];
 var PaymentEntitySchema = z5.object({
   id: z5.uuid(),
   academy_id: z5.uuid(),
@@ -276,10 +294,11 @@ var PaymentEntitySchema = z5.object({
   issued_at: z5.date(),
   billing_at: z5.date(),
   paid_at: z5.date().nullable(),
-  payment_methos: PaymentMethodSchema.nullable(),
+  payment_method: PaymentMethodSchema.nullable(),
   total_amount: z5.string(),
   updated_at: z5.date(),
-  payment_id: z5.uuid().nullable()
+  payment_id: z5.uuid().nullable(),
+  payment_status: PaymentStatusSchema
 });
 var StudentPaymentEntitySchema = z5.object({
   payment_id: z5.uuid(),
@@ -381,6 +400,7 @@ export {
   PaymentMethodSchema,
   PaymentPayloadSchema,
   PaymentSchema,
+  PaymentStatusSchema,
   PaymentUpdatePayloadSchema,
   RelationshipSchema,
   SchoolEntitySchema,
@@ -412,6 +432,7 @@ export {
   initialStudentSchool,
   lessonSorts,
   paymentMehods,
+  paymentStatus,
   relationships,
   schoolDescs,
   schoolSorts,
