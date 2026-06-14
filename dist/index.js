@@ -40,26 +40,16 @@ var AcademyEntitySchema = z.object({
   updated_at: z.date()
 });
 var UserAcademySchema = AcademyEntitySchema.extend({
-  subject: z.array(z.string()),
+  subjects: z.array(z.string()),
   emails: z.array(z.email()),
   tels: z.array(z.string()),
-  role: AdminRoleSchema
+  role: AdminRoleSchema.or(z.string())
 });
 var AcademyPayloadSchema = UserAcademySchema.omit({
   id: true,
   created_at: true,
   updated_at: true
 });
-var initialAcademy = {
-  address: null,
-  ceo: "",
-  emails: [],
-  name: "",
-  regi: "",
-  role: "OWNER",
-  subject: [],
-  tels: []
-};
 var AcademyUpdatePayloadSchema = z.object({
   target: AcademyPayloadSchema.keyof(),
   value: z.any()
@@ -72,6 +62,16 @@ var academy = `id, name, ceo, regi, address, created_at, updated_at,
 var academyQuery = {
   academy,
   admin: `${academy}, role:academy_admin(role)`
+};
+var initialAcademy = {
+  address: null,
+  ceo: "",
+  emails: [],
+  name: "",
+  regi: "",
+  role: "",
+  subjects: [],
+  tels: []
 };
 
 // src/lesson.ts
@@ -108,7 +108,7 @@ var LessonEntitySchema = z2.object({
   id: z2.uuid(),
   academy_id: z2.uuid(),
   name: z2.string(),
-  sort: LessonSortSchema,
+  sort: LessonSortSchema.or(z2.string()),
   subject: z2.string(),
   price: z2.number().min(0),
   length_per_lesson: z2.number().min(0),
@@ -131,29 +131,44 @@ var StudentLessonEntitySchema = z2.object({
   student_id: z2.uuid(),
   lesson_id: z2.uuid()
 });
+var initialLesson = {
+  count_per_month: 1,
+  count_per_week: 1,
+  length_per_lesson: 1,
+  name: "",
+  price: 0,
+  sort: "",
+  subject: ""
+};
 
 // src/parent.ts
 import { z as z3 } from "zod";
 var RelationshipSchema = z3.enum(["\uBD80", "\uBAA8", "\uC870\uBD80\uBAA8", "\uC0AC\uCD0C"]);
-var relationships = ["\uBD80", "\uBAA8", "\uC870\uBD80\uBAA8", "\uC0AC\uCD0C"];
+var relationship = ["\uBD80", "\uBAA8", "\uC870\uBD80\uBAA8", "\uC0AC\uCD0C"];
 var ParentEntitySchema = z3.object({
   id: z3.uuid(),
   academy_id: z3.uuid(),
   name: z3.string(),
   mobile: z3.string().length(11).startsWith("010"),
-  relationships: RelationshipSchema.or(z3.string()),
+  relationship: RelationshipSchema.or(z3.string()),
   created_at: z3.date(),
   updated_at: z3.date()
 });
 var ParentSchema = ParentEntitySchema.omit({ academy_id: true });
 var ParentPayloadSchema = ParentSchema.omit({
   created_at: true,
-  updated_at: true
+  updated_at: true,
+  id: true
 });
 var ParentUpdatePayloadSchema = z3.object({
   target: ParentPayloadSchema.keyof(),
   value: z3.any()
 });
+var initialParent = {
+  mobile: "",
+  name: "",
+  relationship: ""
+};
 
 // src/school.ts
 import { z as z4 } from "zod";
@@ -290,14 +305,14 @@ var PaymentEntitySchema = z5.object({
   id: z5.uuid(),
   academy_id: z5.uuid(),
   title: z5.string(),
-  desc: z5.string().nullable(),
+  description: z5.string().nullable(),
   issued_at: z5.date(),
   billing_at: z5.date(),
   paid_at: z5.date().nullable(),
   payment_method: PaymentMethodSchema.nullable(),
-  total_amount: z5.string(),
+  total_amount: z5.number().min(0),
   updated_at: z5.date(),
-  payment_id: z5.uuid().nullable(),
+  transaction_id: z5.uuid().nullable(),
   payment_status: PaymentStatusSchema
 });
 var StudentPaymentEntitySchema = z5.object({
@@ -308,8 +323,8 @@ var PaymentItemEntitySchema = z5.object({
   id: z5.uuid(),
   payment_id: z5.uuid(),
   title: z5.string(),
-  quan: z5.number().min(1),
-  amount: z5.string()
+  quantity: z5.number().min(1),
+  amount: z5.number().min(0)
 });
 var PaymentItemPayloadSchema = PaymentItemEntitySchema.omit({
   payment_id: true,
@@ -322,8 +337,6 @@ var PaymentPayloadSchema = PaymentEntitySchema.omit({
   id: true,
   issued_at: true,
   updated_at: true
-}).extend({
-  items: z5.array(PaymentItemPayloadSchema)
 });
 var PaymentUpdatePayloadSchema = z5.object({
   target: PaymentPayloadSchema.keyof(),
@@ -351,6 +364,34 @@ var StudentUpdatePayloadSchema = z5.object({
   target: StudentPayloadSchema.keyof(),
   value: z5.any()
 });
+var initialStudent = {
+  discharged_at: null,
+  dob: null,
+  enrolled_at: /* @__PURE__ */ new Date(),
+  lessons: [],
+  mobile: "",
+  name: "",
+  parents: [],
+  payment_date: (/* @__PURE__ */ new Date()).getDate(),
+  payments: [],
+  schools: []
+};
+var initialPayment = {
+  academy_id: "",
+  billing_at: /* @__PURE__ */ new Date(),
+  description: "",
+  paid_at: null,
+  payment_method: null,
+  payment_status: "DUE",
+  title: "",
+  total_amount: 0,
+  transaction_id: null
+};
+var initialPaymentItem = {
+  amount: 0,
+  quantity: 1,
+  title: ""
+};
 
 // src/user.ts
 import { z as z6 } from "zod";
@@ -358,7 +399,7 @@ var UserRoleSchema = z6.enum(["BIZ", "STUDENT", "TEACHER", "PARENT"]);
 var userRoles = ["BIZ", "STUDENT", "TEACHER", "PARENT"];
 var YoonbeeseoUserEntitySchema = z6.object({
   uid: z6.uuid(),
-  email: z6.email(),
+  email: z6.email().nullable(),
   mobile: z6.string().length(11).startsWith("010"),
   name: z6.string(),
   dob: z6.string().length(8).nullable(),
@@ -374,6 +415,46 @@ var YoonbeeseoUserPayloadSchema = YoonbeeseoUserSchema.omit({
   created_at: true,
   updated_at: true
 });
+var YoonbeeseoUserUploadPayloadSchema = z6.object({
+  key: YoonbeeseoUserPayloadSchema.keyof(),
+  value: z6.any()
+});
+var UserTokenSchema = z6.object({
+  id: z6.uuid(),
+  user_id: z6.uuid(),
+  refresh_token_hash: z6.string(),
+  created_at: z6.date(),
+  logged_in_at: z6.date(),
+  expires_at: z6.date(),
+  device_id: z6.string(),
+  device_name: z6.string(),
+  platform: z6.string()
+});
+var UserTokenPayloadSchema = UserTokenSchema.omit({
+  id: true,
+  created_at: true,
+  logged_in_at: true
+});
+var UserTokenUploadPayloadSchema = z6.object({
+  target: UserTokenPayloadSchema.keyof(),
+  value: z6.any()
+});
+var initialUser = {
+  academies: [],
+  dob: null,
+  email: null,
+  mobile: "",
+  name: "",
+  roles: []
+};
+var initialUserToken = {
+  device_id: "",
+  device_name: "",
+  expires_at: /* @__PURE__ */ new Date(),
+  platform: "",
+  refresh_token_hash: "",
+  user_id: ""
+};
 export {
   AcademyAddressSchema,
   AcademyEntitySchema,
@@ -421,19 +502,30 @@ export {
   UserAcademySchema,
   UserRoleSchema,
   UserStudentSchema,
+  UserTokenPayloadSchema,
+  UserTokenSchema,
+  UserTokenUploadPayloadSchema,
   YoonbeeseoUserEntitySchema,
   YoonbeeseoUserPayloadSchema,
   YoonbeeseoUserSchema,
+  YoonbeeseoUserUploadPayloadSchema,
   academyQuery,
   adminRoles,
   adminRolesKor,
   initialAcademy,
+  initialLesson,
+  initialParent,
+  initialPayment,
+  initialPaymentItem,
   initialSchool,
+  initialStudent,
   initialStudentSchool,
+  initialUser,
+  initialUserToken,
   lessonSorts,
   paymentMehods,
   paymentStatus,
-  relationships,
+  relationship,
   schoolDescs,
   schoolSorts,
   schoolSortsKor,

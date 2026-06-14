@@ -46,34 +46,33 @@ declare const UserAcademySchema: z.ZodObject<{
     address: z.ZodNullable<z.ZodObject<{}, z.core.$strip>>;
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
-    subject: z.ZodArray<z.ZodString>;
+    subjects: z.ZodArray<z.ZodString>;
     emails: z.ZodArray<z.ZodEmail>;
     tels: z.ZodArray<z.ZodString>;
-    role: z.ZodEnum<{
+    role: z.ZodUnion<[z.ZodEnum<{
         OWNER: "OWNER";
         CO_ONWER: "CO_ONWER";
         ADMIN: "ADMIN";
         TEACHER: "TEACHER";
-    }>;
+    }>, z.ZodString]>;
 }, z.core.$strip>;
 type UserAcademy = z.infer<typeof UserAcademySchema>;
 declare const AcademyPayloadSchema: z.ZodObject<{
-    role: z.ZodEnum<{
+    role: z.ZodUnion<[z.ZodEnum<{
         OWNER: "OWNER";
         CO_ONWER: "CO_ONWER";
         ADMIN: "ADMIN";
         TEACHER: "TEACHER";
-    }>;
+    }>, z.ZodString]>;
     name: z.ZodString;
     ceo: z.ZodString;
     regi: z.ZodString;
     address: z.ZodNullable<z.ZodObject<{}, z.core.$strip>>;
-    subject: z.ZodArray<z.ZodString>;
+    subjects: z.ZodArray<z.ZodString>;
     emails: z.ZodArray<z.ZodEmail>;
     tels: z.ZodArray<z.ZodString>;
 }, z.core.$strip>;
 type AcademyPayload = z.infer<typeof AcademyPayloadSchema>;
-declare const initialAcademy: AcademyPayload;
 declare const AcademyUpdatePayloadSchema: z.ZodObject<{
     target: z.ZodEnum<{
         role: "role";
@@ -81,7 +80,7 @@ declare const AcademyUpdatePayloadSchema: z.ZodObject<{
         ceo: "ceo";
         regi: "regi";
         address: "address";
-        subject: "subject";
+        subjects: "subjects";
         emails: "emails";
         tels: "tels";
     }>;
@@ -92,6 +91,7 @@ declare const academyQuery: {
     academy: string;
     admin: string;
 };
+declare const initialAcademy: AcademyPayload;
 
 declare const LessonSortSchema: z.ZodEnum<{
     PRE: "PRE";
@@ -115,13 +115,13 @@ declare const LessonEntitySchema: z.ZodObject<{
     id: z.ZodUUID;
     academy_id: z.ZodUUID;
     name: z.ZodString;
-    sort: z.ZodEnum<{
+    sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
         MIDDLE: "MIDDLE";
         HIGH: "HIGH";
         ADULT: "ADULT";
-    }>;
+    }>, z.ZodString]>;
     subject: z.ZodString;
     price: z.ZodNumber;
     length_per_lesson: z.ZodNumber;
@@ -136,14 +136,14 @@ declare const LessonSchema: z.ZodObject<{
     name: z.ZodString;
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
-    subject: z.ZodString;
-    sort: z.ZodEnum<{
+    sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
         MIDDLE: "MIDDLE";
         HIGH: "HIGH";
         ADULT: "ADULT";
-    }>;
+    }>, z.ZodString]>;
+    subject: z.ZodString;
     price: z.ZodNumber;
     length_per_lesson: z.ZodNumber;
     count_per_week: z.ZodNumber;
@@ -152,14 +152,14 @@ declare const LessonSchema: z.ZodObject<{
 type Lesson = z.infer<typeof LessonSchema>;
 declare const LessonPayloadSchema: z.ZodObject<{
     name: z.ZodString;
-    subject: z.ZodString;
-    sort: z.ZodEnum<{
+    sort: z.ZodUnion<[z.ZodEnum<{
         PRE: "PRE";
         PRIMARY: "PRIMARY";
         MIDDLE: "MIDDLE";
         HIGH: "HIGH";
         ADULT: "ADULT";
-    }>;
+    }>, z.ZodString]>;
+    subject: z.ZodString;
     price: z.ZodNumber;
     length_per_lesson: z.ZodNumber;
     count_per_week: z.ZodNumber;
@@ -169,8 +169,8 @@ type LessonPayload = z.infer<typeof LessonPayloadSchema>;
 declare const LessonUpdatePayloadSchema: z.ZodObject<{
     target: z.ZodEnum<{
         name: "name";
-        subject: "subject";
         sort: "sort";
+        subject: "subject";
         price: "price";
         length_per_lesson: "length_per_lesson";
         count_per_week: "count_per_week";
@@ -183,6 +183,7 @@ declare const StudentLessonEntitySchema: z.ZodObject<{
     lesson_id: z.ZodUUID;
 }, z.core.$strip>;
 type StudentLessonEntity = z.infer<typeof StudentLessonEntitySchema>;
+declare const initialLesson: LessonPayload;
 
 declare const RelationshipSchema: z.ZodEnum<{
     부: "부";
@@ -191,13 +192,13 @@ declare const RelationshipSchema: z.ZodEnum<{
     사촌: "사촌";
 }>;
 type Relationship = z.infer<typeof RelationshipSchema>;
-declare const relationships: Relationship[];
+declare const relationship: Relationship[];
 declare const ParentEntitySchema: z.ZodObject<{
     id: z.ZodUUID;
     academy_id: z.ZodUUID;
     name: z.ZodString;
     mobile: z.ZodString;
-    relationships: z.ZodUnion<[z.ZodEnum<{
+    relationship: z.ZodUnion<[z.ZodEnum<{
         부: "부";
         모: "모";
         조부모: "조부모";
@@ -213,7 +214,7 @@ declare const ParentSchema: z.ZodObject<{
     created_at: z.ZodDate;
     updated_at: z.ZodDate;
     mobile: z.ZodString;
-    relationships: z.ZodUnion<[z.ZodEnum<{
+    relationship: z.ZodUnion<[z.ZodEnum<{
         부: "부";
         모: "모";
         조부모: "조부모";
@@ -222,10 +223,9 @@ declare const ParentSchema: z.ZodObject<{
 }, z.core.$strip>;
 type Parent = z.infer<typeof ParentSchema>;
 declare const ParentPayloadSchema: z.ZodObject<{
-    id: z.ZodUUID;
     name: z.ZodString;
     mobile: z.ZodString;
-    relationships: z.ZodUnion<[z.ZodEnum<{
+    relationship: z.ZodUnion<[z.ZodEnum<{
         부: "부";
         모: "모";
         조부모: "조부모";
@@ -235,14 +235,14 @@ declare const ParentPayloadSchema: z.ZodObject<{
 type ParentPayload = z.infer<typeof ParentPayloadSchema>;
 declare const ParentUpdatePayloadSchema: z.ZodObject<{
     target: z.ZodEnum<{
-        id: "id";
         name: "name";
         mobile: "mobile";
-        relationships: "relationships";
+        relationship: "relationship";
     }>;
     value: z.ZodAny;
 }, z.core.$strip>;
 type ParentUpdatePayload = z.infer<typeof ParentUpdatePayloadSchema>;
+declare const initialParent: ParentPayload;
 
 declare const SchoolSortSchema: z.ZodEnum<{
     PRE: "PRE";
@@ -413,7 +413,7 @@ declare const PaymentEntitySchema: z.ZodObject<{
     id: z.ZodUUID;
     academy_id: z.ZodUUID;
     title: z.ZodString;
-    desc: z.ZodNullable<z.ZodString>;
+    description: z.ZodNullable<z.ZodString>;
     issued_at: z.ZodDate;
     billing_at: z.ZodDate;
     paid_at: z.ZodNullable<z.ZodDate>;
@@ -422,9 +422,9 @@ declare const PaymentEntitySchema: z.ZodObject<{
         BANK_TRANSFER: "BANK_TRANSFER";
         CASH: "CASH";
     }>>;
-    total_amount: z.ZodString;
+    total_amount: z.ZodNumber;
     updated_at: z.ZodDate;
-    payment_id: z.ZodNullable<z.ZodUUID>;
+    transaction_id: z.ZodNullable<z.ZodUUID>;
     payment_status: z.ZodEnum<{
         NOT_DUE: "NOT_DUE";
         DUE: "DUE";
@@ -445,25 +445,26 @@ declare const PaymentItemEntitySchema: z.ZodObject<{
     id: z.ZodUUID;
     payment_id: z.ZodUUID;
     title: z.ZodString;
-    quan: z.ZodNumber;
-    amount: z.ZodString;
+    quantity: z.ZodNumber;
+    amount: z.ZodNumber;
 }, z.core.$strip>;
 type PaymentItemEntity = z.infer<typeof PaymentItemEntitySchema>;
 declare const PaymentItemPayloadSchema: z.ZodObject<{
     title: z.ZodString;
-    quan: z.ZodNumber;
-    amount: z.ZodString;
+    quantity: z.ZodNumber;
+    amount: z.ZodNumber;
 }, z.core.$strip>;
 type PaymentItemPayload = z.infer<typeof PaymentItemPayloadSchema>;
 declare const PaymentItemSchema: z.ZodObject<{
     id: z.ZodUUID;
     title: z.ZodString;
-    quan: z.ZodNumber;
-    amount: z.ZodString;
+    quantity: z.ZodNumber;
+    amount: z.ZodNumber;
 }, z.core.$strip>;
 type PaymentItem = z.infer<typeof PaymentItemSchema>;
 declare const PaymentPayloadSchema: z.ZodObject<{
     academy_id: z.ZodUUID;
+    description: z.ZodNullable<z.ZodString>;
     payment_status: z.ZodEnum<{
         NOT_DUE: "NOT_DUE";
         DUE: "DUE";
@@ -474,7 +475,6 @@ declare const PaymentPayloadSchema: z.ZodObject<{
         PAID: "PAID";
     }>;
     title: z.ZodString;
-    desc: z.ZodNullable<z.ZodString>;
     billing_at: z.ZodDate;
     paid_at: z.ZodNullable<z.ZodDate>;
     payment_method: z.ZodNullable<z.ZodEnum<{
@@ -482,27 +482,21 @@ declare const PaymentPayloadSchema: z.ZodObject<{
         BANK_TRANSFER: "BANK_TRANSFER";
         CASH: "CASH";
     }>>;
-    total_amount: z.ZodString;
-    payment_id: z.ZodNullable<z.ZodUUID>;
-    items: z.ZodArray<z.ZodObject<{
-        title: z.ZodString;
-        quan: z.ZodNumber;
-        amount: z.ZodString;
-    }, z.core.$strip>>;
+    total_amount: z.ZodNumber;
+    transaction_id: z.ZodNullable<z.ZodUUID>;
 }, z.core.$strip>;
 type PaymentPayload = z.infer<typeof PaymentPayloadSchema>;
 declare const PaymentUpdatePayloadSchema: z.ZodObject<{
     target: z.ZodEnum<{
         academy_id: "academy_id";
+        description: "description";
         payment_status: "payment_status";
         title: "title";
-        desc: "desc";
         billing_at: "billing_at";
         paid_at: "paid_at";
         payment_method: "payment_method";
         total_amount: "total_amount";
-        payment_id: "payment_id";
-        items: "items";
+        transaction_id: "transaction_id";
     }>;
     value: z.ZodAny;
 }, z.core.$strip>;
@@ -510,6 +504,7 @@ type PaymentUpdatePayload = z.infer<typeof PaymentUpdatePayloadSchema>;
 declare const PaymentSchema: z.ZodObject<{
     id: z.ZodUUID;
     updated_at: z.ZodDate;
+    description: z.ZodNullable<z.ZodString>;
     payment_status: z.ZodEnum<{
         NOT_DUE: "NOT_DUE";
         DUE: "DUE";
@@ -520,7 +515,6 @@ declare const PaymentSchema: z.ZodObject<{
         PAID: "PAID";
     }>;
     title: z.ZodString;
-    desc: z.ZodNullable<z.ZodString>;
     issued_at: z.ZodDate;
     billing_at: z.ZodDate;
     paid_at: z.ZodNullable<z.ZodDate>;
@@ -529,13 +523,13 @@ declare const PaymentSchema: z.ZodObject<{
         BANK_TRANSFER: "BANK_TRANSFER";
         CASH: "CASH";
     }>>;
-    total_amount: z.ZodString;
-    payment_id: z.ZodNullable<z.ZodUUID>;
+    total_amount: z.ZodNumber;
+    transaction_id: z.ZodNullable<z.ZodUUID>;
     items: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         title: z.ZodString;
-        quan: z.ZodNumber;
-        amount: z.ZodString;
+        quantity: z.ZodNumber;
+        amount: z.ZodNumber;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 declare const UserStudentSchema: z.ZodObject<{
@@ -551,6 +545,7 @@ declare const UserStudentSchema: z.ZodObject<{
     payments: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         updated_at: z.ZodDate;
+        description: z.ZodNullable<z.ZodString>;
         payment_status: z.ZodEnum<{
             NOT_DUE: "NOT_DUE";
             DUE: "DUE";
@@ -561,7 +556,6 @@ declare const UserStudentSchema: z.ZodObject<{
             PAID: "PAID";
         }>;
         title: z.ZodString;
-        desc: z.ZodNullable<z.ZodString>;
         issued_at: z.ZodDate;
         billing_at: z.ZodDate;
         paid_at: z.ZodNullable<z.ZodDate>;
@@ -570,13 +564,13 @@ declare const UserStudentSchema: z.ZodObject<{
             BANK_TRANSFER: "BANK_TRANSFER";
             CASH: "CASH";
         }>>;
-        total_amount: z.ZodString;
-        payment_id: z.ZodNullable<z.ZodUUID>;
+        total_amount: z.ZodNumber;
+        transaction_id: z.ZodNullable<z.ZodUUID>;
         items: z.ZodArray<z.ZodObject<{
             id: z.ZodUUID;
             title: z.ZodString;
-            quan: z.ZodNumber;
-            amount: z.ZodString;
+            quantity: z.ZodNumber;
+            amount: z.ZodNumber;
         }, z.core.$strip>>;
     }, z.core.$strip>>;
     lessons: z.ZodArray<z.ZodObject<{
@@ -584,14 +578,14 @@ declare const UserStudentSchema: z.ZodObject<{
         name: z.ZodString;
         created_at: z.ZodDate;
         updated_at: z.ZodDate;
-        subject: z.ZodString;
-        sort: z.ZodEnum<{
+        sort: z.ZodUnion<[z.ZodEnum<{
             PRE: "PRE";
             PRIMARY: "PRIMARY";
             MIDDLE: "MIDDLE";
             HIGH: "HIGH";
             ADULT: "ADULT";
-        }>;
+        }>, z.ZodString]>;
+        subject: z.ZodString;
         price: z.ZodNumber;
         length_per_lesson: z.ZodNumber;
         count_per_week: z.ZodNumber;
@@ -625,7 +619,7 @@ declare const UserStudentSchema: z.ZodObject<{
         created_at: z.ZodDate;
         updated_at: z.ZodDate;
         mobile: z.ZodString;
-        relationships: z.ZodUnion<[z.ZodEnum<{
+        relationship: z.ZodUnion<[z.ZodEnum<{
             부: "부";
             모: "모";
             조부모: "조부모";
@@ -644,6 +638,7 @@ declare const StudentPayloadSchema: z.ZodObject<{
     payments: z.ZodArray<z.ZodObject<{
         id: z.ZodUUID;
         updated_at: z.ZodDate;
+        description: z.ZodNullable<z.ZodString>;
         payment_status: z.ZodEnum<{
             NOT_DUE: "NOT_DUE";
             DUE: "DUE";
@@ -654,7 +649,6 @@ declare const StudentPayloadSchema: z.ZodObject<{
             PAID: "PAID";
         }>;
         title: z.ZodString;
-        desc: z.ZodNullable<z.ZodString>;
         issued_at: z.ZodDate;
         billing_at: z.ZodDate;
         paid_at: z.ZodNullable<z.ZodDate>;
@@ -663,13 +657,13 @@ declare const StudentPayloadSchema: z.ZodObject<{
             BANK_TRANSFER: "BANK_TRANSFER";
             CASH: "CASH";
         }>>;
-        total_amount: z.ZodString;
-        payment_id: z.ZodNullable<z.ZodUUID>;
+        total_amount: z.ZodNumber;
+        transaction_id: z.ZodNullable<z.ZodUUID>;
         items: z.ZodArray<z.ZodObject<{
             id: z.ZodUUID;
             title: z.ZodString;
-            quan: z.ZodNumber;
-            amount: z.ZodString;
+            quantity: z.ZodNumber;
+            amount: z.ZodNumber;
         }, z.core.$strip>>;
     }, z.core.$strip>>;
     lessons: z.ZodArray<z.ZodObject<{
@@ -677,14 +671,14 @@ declare const StudentPayloadSchema: z.ZodObject<{
         name: z.ZodString;
         created_at: z.ZodDate;
         updated_at: z.ZodDate;
-        subject: z.ZodString;
-        sort: z.ZodEnum<{
+        sort: z.ZodUnion<[z.ZodEnum<{
             PRE: "PRE";
             PRIMARY: "PRIMARY";
             MIDDLE: "MIDDLE";
             HIGH: "HIGH";
             ADULT: "ADULT";
-        }>;
+        }>, z.ZodString]>;
+        subject: z.ZodString;
         price: z.ZodNumber;
         length_per_lesson: z.ZodNumber;
         count_per_week: z.ZodNumber;
@@ -718,7 +712,7 @@ declare const StudentPayloadSchema: z.ZodObject<{
         created_at: z.ZodDate;
         updated_at: z.ZodDate;
         mobile: z.ZodString;
-        relationships: z.ZodUnion<[z.ZodEnum<{
+        relationship: z.ZodUnion<[z.ZodEnum<{
             부: "부";
             모: "모";
             조부모: "조부모";
@@ -743,6 +737,9 @@ declare const StudentUpdatePayloadSchema: z.ZodObject<{
     value: z.ZodAny;
 }, z.core.$strip>;
 type StudentUpdatePayload = z.infer<typeof StudentUpdatePayloadSchema>;
+declare const initialStudent: StudentPayload;
+declare const initialPayment: PaymentPayload;
+declare const initialPaymentItem: PaymentItemPayload;
 
 declare const UserRoleSchema: z.ZodEnum<{
     TEACHER: "TEACHER";
@@ -754,7 +751,7 @@ type UserRole = z.infer<typeof UserRoleSchema>;
 declare const userRoles: UserRole[];
 declare const YoonbeeseoUserEntitySchema: z.ZodObject<{
     uid: z.ZodUUID;
-    email: z.ZodEmail;
+    email: z.ZodNullable<z.ZodEmail>;
     mobile: z.ZodString;
     name: z.ZodString;
     dob: z.ZodNullable<z.ZodString>;
@@ -764,7 +761,7 @@ declare const YoonbeeseoUserEntitySchema: z.ZodObject<{
 type YoonbeeseoUserEntity = z.infer<typeof YoonbeeseoUserEntitySchema>;
 declare const YoonbeeseoUserSchema: z.ZodObject<{
     uid: z.ZodUUID;
-    email: z.ZodEmail;
+    email: z.ZodNullable<z.ZodEmail>;
     mobile: z.ZodString;
     name: z.ZodString;
     dob: z.ZodNullable<z.ZodString>;
@@ -784,21 +781,21 @@ declare const YoonbeeseoUserSchema: z.ZodObject<{
         address: z.ZodNullable<z.ZodObject<{}, z.core.$strip>>;
         created_at: z.ZodDate;
         updated_at: z.ZodDate;
-        subject: z.ZodArray<z.ZodString>;
+        subjects: z.ZodArray<z.ZodString>;
         emails: z.ZodArray<z.ZodEmail>;
         tels: z.ZodArray<z.ZodString>;
-        role: z.ZodEnum<{
+        role: z.ZodUnion<[z.ZodEnum<{
             OWNER: "OWNER";
             CO_ONWER: "CO_ONWER";
             ADMIN: "ADMIN";
             TEACHER: "TEACHER";
-        }>;
+        }>, z.ZodString]>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 type YoonbeeseoUser = z.infer<typeof YoonbeeseoUserSchema>;
 declare const YoonbeeseoUserPayloadSchema: z.ZodObject<{
     name: z.ZodString;
-    email: z.ZodEmail;
+    email: z.ZodNullable<z.ZodEmail>;
     mobile: z.ZodString;
     dob: z.ZodNullable<z.ZodString>;
     roles: z.ZodArray<z.ZodEnum<{
@@ -815,16 +812,63 @@ declare const YoonbeeseoUserPayloadSchema: z.ZodObject<{
         address: z.ZodNullable<z.ZodObject<{}, z.core.$strip>>;
         created_at: z.ZodDate;
         updated_at: z.ZodDate;
-        subject: z.ZodArray<z.ZodString>;
+        subjects: z.ZodArray<z.ZodString>;
         emails: z.ZodArray<z.ZodEmail>;
         tels: z.ZodArray<z.ZodString>;
-        role: z.ZodEnum<{
+        role: z.ZodUnion<[z.ZodEnum<{
             OWNER: "OWNER";
             CO_ONWER: "CO_ONWER";
             ADMIN: "ADMIN";
             TEACHER: "TEACHER";
-        }>;
+        }>, z.ZodString]>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
+type YoonbeeseoUserPayload = z.infer<typeof YoonbeeseoUserPayloadSchema>;
+declare const YoonbeeseoUserUploadPayloadSchema: z.ZodObject<{
+    key: z.ZodEnum<{
+        name: "name";
+        email: "email";
+        mobile: "mobile";
+        dob: "dob";
+        roles: "roles";
+        academies: "academies";
+    }>;
+    value: z.ZodAny;
+}, z.core.$strip>;
+type YoonbeeseoUserUploadPayload = z.infer<typeof YoonbeeseoUserUploadPayloadSchema>;
+declare const UserTokenSchema: z.ZodObject<{
+    id: z.ZodUUID;
+    user_id: z.ZodUUID;
+    refresh_token_hash: z.ZodString;
+    created_at: z.ZodDate;
+    logged_in_at: z.ZodDate;
+    expires_at: z.ZodDate;
+    device_id: z.ZodString;
+    device_name: z.ZodString;
+    platform: z.ZodString;
+}, z.core.$strip>;
+type UserToken = z.infer<typeof UserTokenSchema>;
+declare const UserTokenPayloadSchema: z.ZodObject<{
+    user_id: z.ZodUUID;
+    refresh_token_hash: z.ZodString;
+    expires_at: z.ZodDate;
+    device_id: z.ZodString;
+    device_name: z.ZodString;
+    platform: z.ZodString;
+}, z.core.$strip>;
+type UserTokenPayload = z.infer<typeof UserTokenPayloadSchema>;
+declare const UserTokenUploadPayloadSchema: z.ZodObject<{
+    target: z.ZodEnum<{
+        user_id: "user_id";
+        refresh_token_hash: "refresh_token_hash";
+        expires_at: "expires_at";
+        device_id: "device_id";
+        device_name: "device_name";
+        platform: "platform";
+    }>;
+    value: z.ZodAny;
+}, z.core.$strip>;
+declare const initialUser: YoonbeeseoUserPayload;
+declare const initialUserToken: UserTokenPayload;
 
-export { AcademyAddressSchema, type AcademyEntity, AcademyEntitySchema, type AcademyPayload, AcademyPayloadSchema, type AcademyUpdatePayload, AcademyUpdatePayloadSchema, type AdminEntity, AdminEntitySchema, type AdminRole, type AdminRoleKor, AdminRoleKorSchema, AdminRoleSchema, type Lesson, type LessonEntity, LessonEntitySchema, type LessonPayload, LessonPayloadSchema, LessonSchema, type LessonSort, type LessonSortKor, LessonSortKorSchema, LessonSortSchema, LessonSortsKor, LessonUpdatePayloadSchema, type Parent, type ParentEntity, ParentEntitySchema, type ParentPayload, ParentPayloadSchema, ParentSchema, type ParentUpdatePayload, ParentUpdatePayloadSchema, type PaymentEntity, PaymentEntitySchema, type PaymentItem, type PaymentItemEntity, PaymentItemEntitySchema, type PaymentItemPayload, PaymentItemPayloadSchema, PaymentItemSchema, type PaymentMethod, PaymentMethodSchema, type PaymentPayload, PaymentPayloadSchema, PaymentSchema, type PaymentStatus, PaymentStatusSchema, type PaymentUpdatePayload, PaymentUpdatePayloadSchema, type Relationship, RelationshipSchema, type SchoolEntity, SchoolEntitySchema, type SchoolPayload, SchoolPayloadSchema, type SchoolSort, type SchoolSortKor, SchoolSortKorSchema, SchoolSortSchema, type SchoolUploadPayload, SchoolUploadPayloadSchema, type StudentEntity, StudentEntitySchema, type StudentLessonEntity, StudentLessonEntitySchema, type StudentPayload, StudentPayloadSchema, type StudentPaymentEntity, StudentPaymentEntitySchema, type StudentSchool, type StudentSchoolDesc, StudentSchoolDescSchema, type StudentSchoolEntity, StudentSchoolEntitySchema, type StudentSchoolPayload, StudentSchoolPayloadSchema, StudentSchoolSchema, type StudentSchoolUploadPayload, StudentSchoolUploadPayloadSchema, type StudentUpdatePayload, StudentUpdatePayloadSchema, type UserAcademy, UserAcademySchema, type UserRole, UserRoleSchema, type UserStudent, UserStudentSchema, type YoonbeeseoUser, type YoonbeeseoUserEntity, YoonbeeseoUserEntitySchema, YoonbeeseoUserPayloadSchema, YoonbeeseoUserSchema, academyQuery, adminRoles, adminRolesKor, initialAcademy, initialSchool, initialStudentSchool, lessonSorts, paymentMehods, paymentStatus, relationships, schoolDescs, schoolSorts, schoolSortsKor, userRoles };
+export { AcademyAddressSchema, type AcademyEntity, AcademyEntitySchema, type AcademyPayload, AcademyPayloadSchema, type AcademyUpdatePayload, AcademyUpdatePayloadSchema, type AdminEntity, AdminEntitySchema, type AdminRole, type AdminRoleKor, AdminRoleKorSchema, AdminRoleSchema, type Lesson, type LessonEntity, LessonEntitySchema, type LessonPayload, LessonPayloadSchema, LessonSchema, type LessonSort, type LessonSortKor, LessonSortKorSchema, LessonSortSchema, LessonSortsKor, LessonUpdatePayloadSchema, type Parent, type ParentEntity, ParentEntitySchema, type ParentPayload, ParentPayloadSchema, ParentSchema, type ParentUpdatePayload, ParentUpdatePayloadSchema, type PaymentEntity, PaymentEntitySchema, type PaymentItem, type PaymentItemEntity, PaymentItemEntitySchema, type PaymentItemPayload, PaymentItemPayloadSchema, PaymentItemSchema, type PaymentMethod, PaymentMethodSchema, type PaymentPayload, PaymentPayloadSchema, PaymentSchema, type PaymentStatus, PaymentStatusSchema, type PaymentUpdatePayload, PaymentUpdatePayloadSchema, type Relationship, RelationshipSchema, type SchoolEntity, SchoolEntitySchema, type SchoolPayload, SchoolPayloadSchema, type SchoolSort, type SchoolSortKor, SchoolSortKorSchema, SchoolSortSchema, type SchoolUploadPayload, SchoolUploadPayloadSchema, type StudentEntity, StudentEntitySchema, type StudentLessonEntity, StudentLessonEntitySchema, type StudentPayload, StudentPayloadSchema, type StudentPaymentEntity, StudentPaymentEntitySchema, type StudentSchool, type StudentSchoolDesc, StudentSchoolDescSchema, type StudentSchoolEntity, StudentSchoolEntitySchema, type StudentSchoolPayload, StudentSchoolPayloadSchema, StudentSchoolSchema, type StudentSchoolUploadPayload, StudentSchoolUploadPayloadSchema, type StudentUpdatePayload, StudentUpdatePayloadSchema, type UserAcademy, UserAcademySchema, type UserRole, UserRoleSchema, type UserStudent, UserStudentSchema, type UserToken, type UserTokenPayload, UserTokenPayloadSchema, UserTokenSchema, UserTokenUploadPayloadSchema, type YoonbeeseoUser, type YoonbeeseoUserEntity, YoonbeeseoUserEntitySchema, type YoonbeeseoUserPayload, YoonbeeseoUserPayloadSchema, YoonbeeseoUserSchema, type YoonbeeseoUserUploadPayload, YoonbeeseoUserUploadPayloadSchema, academyQuery, adminRoles, adminRolesKor, initialAcademy, initialLesson, initialParent, initialPayment, initialPaymentItem, initialSchool, initialStudent, initialStudentSchool, initialUser, initialUserToken, lessonSorts, paymentMehods, paymentStatus, relationship, schoolDescs, schoolSorts, schoolSortsKor, userRoles };

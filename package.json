@@ -1,6 +1,6 @@
 {
   "name": "@yoontec/yoonbeeseo-types",
-  "version": "0.1.12",
+  "version": "0.1.1211",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@types/node": "^25.9.2",
-    "@yoontec/yoonbeeseo-types": "^0.1.12",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },
